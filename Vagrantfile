@@ -46,7 +46,7 @@ Vagrant.configure(2) do |config|
 
   # run Puppet provisioning
   config.vm.provision :puppet do |puppet|
-    puppet.manifests_path     = "."
+    puppet.manifests_path     = "./manifests/"
     puppet.manifest_file      = "puppet.pp"
     puppet.module_path        = "./modules"
     puppet.options = "--verbose --debug"
