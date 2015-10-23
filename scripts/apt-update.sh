@@ -1,0 +1,2 @@
+# update APT repositories unless the last update was less than 48 hours ago
+[ "$(find /home/vagrant/ -maxdepth 1 -name apt_updated -mtime -48)" == "" ] && apt-get update --fix-missing && touch /home/vagrant/apt_updated; echo ""
