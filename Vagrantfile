@@ -38,4 +38,5 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", path: "provisioners/shell/base.sh"
+  config.vm.provision "shell", path: "provisioners/shell/git.sh"
 end
