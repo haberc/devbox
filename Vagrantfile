@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = name
 
   config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--name", name]
     vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
     vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
@@ -26,7 +27,7 @@ Vagrant.configure("2") do |config|
   if Vagrant.has_plugin? 'vagrant-dns'
     # Configure vagrant-dns plugin
     config.dns.tld = "dev"
-    config.dns.patterns = /^.*appbounty.dev$/
+    config.dns.patterns = Regexp.new("^.*#{name}.dev$")
     # @end: Configure vagrant-dns plugin
   end
 
