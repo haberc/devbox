@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     # The Vagrant auto_network plugin will find a free IP for you
     config.vm.network :private_network, auto_network: true
   else
-    config.vm.network "private_network", ip: "10.50.50.10"
+    config.vm.network "private_network", ip: "33.33.0.10"
   end
 
   # basic packages, you should run those on every box
