@@ -38,6 +38,14 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", ip: "10.50.50.10"
   end
 
+  # basic packages, you should run those on every box
   config.vm.provision "shell", path: "provisioners/shell/base.sh"
   config.vm.provision "shell", path: "provisioners/shell/git.sh"
+  config.vm.provision "shell", path: "provisioners/shell/ssh.sh"
+
+  # optional features, uncomment those you need
+  config.vm.provision "shell", path: "provisioners/shell/nodejs.sh"
+  config.vm.provision "shell", path: "provisioners/shell/ruby.sh"
+  config.vm.provision "shell", path: "provisioners/shell/mongodb.sh"
+  config.vm.provision "shell", path: "provisioners/shell/redis.sh"
 end
