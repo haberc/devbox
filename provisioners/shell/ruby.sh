@@ -11,6 +11,5 @@ if [ ! -L /usr/local/bin/ruby ] ; then
 fi
 
 if [ ! -f /usr/local/bin/gem ] ; then
-    cd /usr/ports/devel/ruby-gems
-    make install clean
+    # TODO: install gem without compiling an entirely new ruby
 fi
