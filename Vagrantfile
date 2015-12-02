@@ -44,8 +44,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioners/shell/ssh.sh"
 
   # optional features, uncomment those you need
-  config.vm.provision "shell", path: "provisioners/shell/nodejs.sh"
-  config.vm.provision "shell", path: "provisioners/shell/ruby.sh"
-  config.vm.provision "shell", path: "provisioners/shell/mongodb.sh"
-  config.vm.provision "shell", path: "provisioners/shell/redis.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/nodejs.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/ruby.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/mongodb.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/redis.sh"
 end
