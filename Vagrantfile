@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 name = 'devbox-freebsd'
+hostname = 'freebsd'
 
 Vagrant.configure("2") do |config|
   config.vm.guest = :freebsd
@@ -10,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.ssh.shell = "sh"
   config.vm.base_mac = "080027D14C66"
 
-  config.vm.hostname = name
+  config.vm.hostname = hostname
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--name", name]
@@ -27,7 +28,7 @@ Vagrant.configure("2") do |config|
   if Vagrant.has_plugin? 'vagrant-dns'
     # Configure vagrant-dns plugin
     config.dns.tld = "dev"
-    config.dns.patterns = Regexp.new("^.*#{name}.dev$")
+    config.dns.patterns = Regexp.new("^.*#{hostname}.dev$")
     # @end: Configure vagrant-dns plugin
   end
 
