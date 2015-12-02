@@ -1,54 +1,52 @@
-=begin
-required vagrant plugins:
-- vagrant-dns
-- vagrant-bindfs
-=end
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-require "yaml"
-require "ostruct"
+name = 'devbox-freebsd'
+hostname = 'freebsd'
 
-options = OpenStruct.new(YAML.load(File.read "vagrant_options.yml"))
+Vagrant.configure("2") do |config|
+  config.vm.guest = :freebsd
+  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", nfs: true
+  config.vm.box = "freebsd/FreeBSD-10.2-RELEASE"
+  config.ssh.shell = "sh"
+  config.vm.base_mac = "080027D14C66"
 
-Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = options.hostname
+  config.vm.hostname = hostname
 
-  # configure DNS to resolve the VM's hostname
-  if Vagrant.has_plugin? 'vagrant-dns'
-    config.dns.tld = "dev";
-    config.dns.patterns = [Regexp.new("^.*#{options.hostname}\.dev$")]
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--name", name]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+    vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+    vb.customize ["modifyvm", :id, "--audio", "none"]
+    vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
+    vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
   end
 
-  # configure network interfaces
-  config.vm.network "private_network", ip: options.ip
-
-  # configure SSH connectivity
   config.ssh.forward_agent = true
-  config.ssh.insert_key = true
-  config.vm.provider "virtualbox" do |v|
-    v.customize ["modifyvm", :id, "--name", options.name]
-    v.cpus = 2
-    v.memory = 1024
+
+  if Vagrant.has_plugin? 'vagrant-dns'
+    # Configure vagrant-dns plugin
+    config.dns.tld = "dev"
+    config.dns.patterns = Regexp.new("^.*#{hostname}.dev$")
+    # @end: Configure vagrant-dns plugin
   end
 
-  # mount the project dir inside the VM
-  config.vm.synced_folder options.project_dir, "/project_nfs", type: "nfs"
-  # re-bind the mounted dir with corrected ownership (fixes a vagrant/NFS issue)
-  config.bindfs.bind_folder "/project_nfs", "/project"
-
-  # set port forwardings from config file
-  options.forwarded_ports.each do |name, forward|
-    config.vm.network "forwarded_port", guest: forward['guest'], host: forward['host'], auto_correct: true
+  if Vagrant.has_plugin? 'vagrant-auto_network'
+    # The Vagrant auto_network plugin will find a free IP for you
+    config.vm.network :private_network, auto_network: true
+  else
+    config.vm.network "private_network", ip: "33.33.0.10"
   end
 
-  # update APT repos
-  config.vm.provision :shell, :path => "./scripts/apt-update.sh"
+  # basic packages, you should run those on every box
+  config.vm.provision "shell", path: "provisioners/shell/base.sh"
+  config.vm.provision "shell", path: "provisioners/shell/git.sh"
+  config.vm.provision "shell", path: "provisioners/shell/ssh.sh"
 
-  # run Puppet provisioning
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path     = "./manifests/"
-    puppet.manifest_file      = "puppet.pp"
-    puppet.module_path        = "./modules"
-    puppet.options = "--verbose --debug"
-  end
+  # optional features, uncomment those you need
+  #config.vm.provision "shell", path: "provisioners/shell/nodejs.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/ruby.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/mongodb.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/redis.sh"
 end
