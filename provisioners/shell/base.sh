@@ -21,6 +21,11 @@ else
     portsnap --interactive fetch update
 fi
 
+if [ ! -L /etc/ssl/cert.pem ] ; then
+    cd /usr/ports/security/ca_root_nss
+    make install clean
+fi
+
 
 # download kernel sources
 # optional. only enable this, if you actually need it.
