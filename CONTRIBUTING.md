@@ -6,6 +6,14 @@ provisioning scripts to have more services ready-to-use.
 Also, reporting any issues, bugs or requests for improvements as well as better documentation
 are valuable contributions.
 
+**All contributions and communications are subject to the [Code of Conduct](#contributor-code-of-conduct).**
+
+## Issues and Pull Requests
+
+Use [this project's Github issues](https://github.com/lnwdr/devbox/issues) for bug reports, questions or suggestions. 
+
+For changes/additions to code or documetnation, create a pull request.
+
 ## Provisioners
 
 When adding a provisioner to the devbox, please mimic the style of the existing ones.
