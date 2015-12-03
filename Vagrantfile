@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 name = 'devbox-freebsd'
-hostname = 'freebsd'
+hostname = 'freebsd.dev'
 
 Vagrant.configure("2") do |config|
   config.vm.guest = :freebsd
@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
   if Vagrant.has_plugin? 'vagrant-dns'
     # Configure vagrant-dns plugin
     config.dns.tld = "dev"
-    config.dns.patterns = Regexp.new("^.*#{hostname}.dev$")
+    config.dns.patterns = Regexp.new("^.*#{hostname}$")
     # @end: Configure vagrant-dns plugin
   end
 
@@ -44,9 +44,15 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provisioners/shell/git.sh"
   config.vm.provision "shell", path: "provisioners/shell/ssh.sh"
 
+  # nginx is not "optional" since it's used as a proxy for things like couchdb, elasticsearch, etc.
+  config.vm.provision "shell", path: "provisioners/shell/nginx.sh"
+
   # optional features, uncomment those you need
   #config.vm.provision "shell", path: "provisioners/shell/nodejs.sh"
   #config.vm.provision "shell", path: "provisioners/shell/ruby.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/php.sh"
   #config.vm.provision "shell", path: "provisioners/shell/mongodb.sh"
+  #config.vm.provision "shell", path: "provisioners/shell/couchdb.sh", args: "#{hostname}"
+  #config.vm.provision "shell", path: "provisioners/shell/elasticsearch.sh", args: "#{hostname}"
   #config.vm.provision "shell", path: "provisioners/shell/redis.sh"
 end

@@ -22,3 +22,24 @@ if ! grep -Fxq 'elasticsearch_enable="YES"' /etc/rc.conf ; then
     echo 'elasticsearch_enable="YES"' >> /etc/rc.conf
     service elasticsearch start
 fi
+
+# setup an nginx site to access ES from outside
+
+hostname=$1
+nginx_site_conf=$(cat <<EOF
+server {
+    listen 80;
+    server_name es.$hostname;
+    location / {
+        proxy_pass http://localhost:9200;
+    }
+}
+EOF
+)
+
+nginx_site_path=/usr/local/etc/nginx/conf.d/es.conf
+
+if [ ! -f $nginx_site_path ] ; then
+    echo -e "$nginx_site_conf" > $nginx_site_path;
+    service nginx restart
+fi
