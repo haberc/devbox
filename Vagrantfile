@@ -30,6 +30,13 @@ Vagrant.configure("2") do |config|
     config.dns.tld = "dev"
     config.dns.patterns = Regexp.new("^.*#{hostname}$")
     # @end: Configure vagrant-dns plugin
+  elsif Vagrant.has_plugin? 'vagrant-hostmaster'
+    config.vm.host_name = hostname
+    config.hosts.aliases = [
+      #"www.#{hostname}",
+      #"couchdb.#{hostname}",
+      #"es.#{hostname}"
+    ]
   end
 
   if Vagrant.has_plugin? 'vagrant-auto_network'
