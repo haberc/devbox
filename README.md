@@ -17,7 +17,7 @@ The [vagrant-auto_network plugin](https://github.com/oscar-stack/vagrant-auto_ne
 ```sh
 git clone git@github.com:lnwdr/devbox.git
 cd devbox
-vargant up
+vagrant up
 ```
 
 On the first boot, the SSH connection may take some time to establish and vagrant will complain about timeouts. Don't worry, just wait. After the first time, booting will be much faster.
